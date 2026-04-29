@@ -1,0 +1,10 @@
+{
+  "manifest_id": "write-privileged-test",
+  "manifest_version": "1.0.0",
+  "bound_agent_ids": ["adversarial-agent"],
+  "effect_class": "WRITE_PRIVILEGED",
+  "allowed_models": ["claude-sonnet-4-6"],
+  "max_prompt_chars": 1000,
+  "system_prompt": "test",
+  "redaction_rules": {"strip_pii_from_logs": true, "log_prompt": false}
+}

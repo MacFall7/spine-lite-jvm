@@ -56,9 +56,9 @@ public class GovernedCallController {
 
     if (decision instanceof GovernanceDecision.Allow allow) {
       LoadedManifest loaded = allow.loadedManifest();
-      String model = loaded.manifest().allowedModels().get(0);
       LlmResponse llmResponse =
-          llmClient.complete(model, loaded.manifest().systemPrompt(), request.prompt());
+          llmClient.complete(
+              allow.resolvedModel(), loaded.manifest().systemPrompt(), request.prompt());
       long latency = System.currentTimeMillis() - start;
       AuditReceipt receipt =
           auditService.recordAllow(request, requestId, loaded, llmResponse, latency);

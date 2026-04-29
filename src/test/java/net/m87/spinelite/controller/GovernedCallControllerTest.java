@@ -72,7 +72,8 @@ class GovernedCallControllerTest {
   @Test
   void allowPathReturns200WithReceiptId() throws Exception {
     LoadedManifest loaded = new LoadedManifest(manifest(), "sha256:m");
-    when(kernel.evaluate(any())).thenReturn(new GovernanceDecision.Allow(loaded));
+    when(kernel.evaluate(any()))
+        .thenReturn(new GovernanceDecision.Allow(loaded, "claude-sonnet-4-6"));
     when(llmClient.complete(eq("claude-sonnet-4-6"), eq("system prompt text"), eq("hello")))
         .thenReturn(new LlmResponse("hi back", "claude-sonnet-4-6", "end_turn"));
     when(auditService.recordAllow(any(), any(), eq(loaded), any(), anyLong()))

@@ -54,7 +54,7 @@ class AuditReceiptServiceTest {
   }
 
   private static GovernedCallRequest request(String prompt) {
-    return new GovernedCallRequest("agent-1", "m1", prompt, null);
+    return new GovernedCallRequest("agent-1", "m1", prompt, null, null);
   }
 
   @Test

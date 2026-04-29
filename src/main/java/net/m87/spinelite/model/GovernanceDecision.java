@@ -5,7 +5,7 @@ import java.util.List;
 public sealed interface GovernanceDecision
     permits GovernanceDecision.Allow, GovernanceDecision.Deny {
 
-  record Allow(LoadedManifest loadedManifest) implements GovernanceDecision {}
+  record Allow(LoadedManifest loadedManifest, String resolvedModel) implements GovernanceDecision {}
 
   record Deny(List<GovernanceViolation> violations) implements GovernanceDecision {}
 }

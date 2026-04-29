@@ -82,6 +82,16 @@ public class GovernanceKernel {
                   "prompt")));
     }
 
-    return new GovernanceDecision.Allow(loaded);
+    if (req.model() != null && !manifest.allowedModels().contains(req.model())) {
+      return new GovernanceDecision.Deny(
+          List.of(
+              new GovernanceViolation(
+                  GovernanceViolation.MODEL_NOT_ALLOWED,
+                  "Model '" + req.model() + "' is not in the manifest's allowed_models list",
+                  "model")));
+    }
+
+    String resolvedModel = req.model() != null ? req.model() : manifest.allowedModels().get(0);
+    return new GovernanceDecision.Allow(loaded, resolvedModel);
   }
 }

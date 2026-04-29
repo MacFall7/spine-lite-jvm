@@ -113,6 +113,7 @@ Tests do not require a live API key — every governance test mocks the
   "agent_id": "summarizer-v1",
   "tool_manifest_id": "readonly-summarizer",
   "prompt": "Summarize the following clinical note: ...",
+  "model": "claude-sonnet-4-6",
   "metadata": {
     "request_id": "optional-client-supplied-uuid",
     "trace_id": "optional"
@@ -121,8 +122,14 @@ Tests do not require a live API key — every governance test mocks the
 ```
 
 Validation (controller layer): `agent_id` and `tool_manifest_id` must match
-`^[a-z0-9-]{3,64}$`; `prompt` must be 1–32 000 characters; `metadata` is
-optional and the server fills in `request_id` if absent.
+`^[a-z0-9-]{3,64}$`; `prompt` must be 1–32 000 characters; `model` is
+optional and (when present) must match `^[A-Za-z0-9._-]{1,128}$`; `metadata`
+is optional and the server fills in `request_id` if absent.
+
+If `model` is omitted, the kernel resolves it to the manifest's first entry
+in `allowed_models`. If `model` is supplied but is not in the manifest's
+`allowed_models`, the kernel denies with `MODEL_NOT_ALLOWED` — the manifest
+is the authority on which models a given agent may invoke.
 
 **200 ALLOW:**
 
@@ -162,13 +169,14 @@ kernel.
 
 Closed set of violation codes:
 
-| Code                          | Meaning                                                   |
-| ----------------------------- | --------------------------------------------------------- |
-| `MANIFEST_NOT_FOUND`          | No manifest with that id is registered                    |
-| `MANIFEST_AGENT_MISMATCH`     | Manifest exists but is not bound to the calling agent     |
-| `EFFECT_CLASS_FORBIDDEN`      | Manifest declares an effect class this endpoint forbids   |
-| `PROMPT_SIZE_VIOLATION`       | Prompt is longer than the manifest's `max_prompt_chars`   |
-| `MANIFEST_INTEGRITY_FAILURE`  | The current manifest hash does not match its load-time hash |
+| Code                          | Meaning                                                       |
+| ----------------------------- | ------------------------------------------------------------- |
+| `MANIFEST_NOT_FOUND`          | No manifest with that id is registered                        |
+| `MANIFEST_AGENT_MISMATCH`     | Manifest exists but is not bound to the calling agent         |
+| `EFFECT_CLASS_FORBIDDEN`      | Manifest declares an effect class this endpoint forbids       |
+| `PROMPT_SIZE_VIOLATION`       | Prompt is longer than the manifest's `max_prompt_chars`       |
+| `MANIFEST_INTEGRITY_FAILURE`  | The current manifest hash does not match its load-time hash   |
+| `MODEL_NOT_ALLOWED`           | Caller-supplied `model` is not in the manifest's `allowed_models` |
 
 ### `GET /v1/receipts/{receipt_id}`
 
@@ -280,10 +288,18 @@ The fail-closed invariants this service enforces:
 4. **Effect classes the endpoint forbids cannot execute.** v1 forbids
    `WRITE_PRIVILEGED` via configuration; manifests declaring it can be
    loaded for inspection but never run.
-5. **Prompts are never logged unless the manifest opts in.** `log_prompt:
+5. **The manifest is the authority on which models may be invoked.** The
+   kernel — not the controller — resolves the model. A caller-supplied
+   `model` outside the manifest's `allowed_models` is denied with
+   `MODEL_NOT_ALLOWED`; an absent `model` resolves to `allowed_models[0]`.
+   Default resolution is a kernel decision, not a controller fallback:
+   calls that omit `model` go through the same code path that enforces
+   explicit-model whitelisting, so there is no audit-distinct "default"
+   branch the controller could quietly take.
+6. **Prompts are never logged unless the manifest opts in.** `log_prompt:
    true` in `redaction_rules` enables a 200-character prefix in the structured
    audit log; raw responses are never logged.
-6. **Boot fails closed when configuration is incomplete.** Missing
+7. **Boot fails closed when configuration is incomplete.** Missing
    `ANTHROPIC_API_KEY`, malformed manifests, missing fields, and duplicate
    `manifest_id` values all abort startup.
 

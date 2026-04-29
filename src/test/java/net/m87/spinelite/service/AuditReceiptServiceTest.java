@@ -110,9 +110,18 @@ class AuditReceiptServiceTest {
   void receiptHashIsDeterministicForIdenticalInputs() {
     AuditReceipt template =
         new AuditReceipt(
-            "rid", "qid", java.time.Instant.parse("2026-04-29T14:23:01.456Z"),
-            "agent-1", "m1", "sha256:m", "ALLOW",
-            List.of(), "sha256:p", "sha256:r", "claude-sonnet-4-6", null);
+            "rid",
+            "qid",
+            java.time.Instant.parse("2026-04-29T14:23:01.456Z"),
+            "agent-1",
+            "m1",
+            "sha256:m",
+            "ALLOW",
+            List.of(),
+            "sha256:p",
+            "sha256:r",
+            "claude-sonnet-4-6",
+            null);
 
     String h1 = service.computeReceiptHash(template);
     for (int i = 0; i < 1000; i++) {
@@ -124,9 +133,18 @@ class AuditReceiptServiceTest {
   void receiptHashChangesIfAnyFieldChanges() {
     AuditReceipt base =
         new AuditReceipt(
-            "rid", "qid", java.time.Instant.parse("2026-04-29T14:23:01.456Z"),
-            "agent-1", "m1", "sha256:m", "ALLOW",
-            List.of(), "sha256:p", "sha256:r", "claude-sonnet-4-6", null);
+            "rid",
+            "qid",
+            java.time.Instant.parse("2026-04-29T14:23:01.456Z"),
+            "agent-1",
+            "m1",
+            "sha256:m",
+            "ALLOW",
+            List.of(),
+            "sha256:p",
+            "sha256:r",
+            "claude-sonnet-4-6",
+            null);
     String baseHash = service.computeReceiptHash(base);
 
     AuditReceipt mutatedAgent = withAgent(base, "agent-2");
@@ -153,7 +171,8 @@ class AuditReceiptServiceTest {
 
     for (ILoggingEvent event : appender.list) {
       assertThat(event.getFormattedMessage()).doesNotContain(secretPrompt);
-      for (Object arg : event.getArgumentArray() == null ? new Object[0] : event.getArgumentArray()) {
+      for (Object arg :
+          event.getArgumentArray() == null ? new Object[0] : event.getArgumentArray()) {
         assertThat(String.valueOf(arg)).doesNotContain(secretPrompt);
       }
     }
@@ -172,7 +191,8 @@ class AuditReceiptServiceTest {
 
     for (ILoggingEvent event : appender.list) {
       assertThat(event.getFormattedMessage()).doesNotContain(secretResponse);
-      for (Object arg : event.getArgumentArray() == null ? new Object[0] : event.getArgumentArray()) {
+      for (Object arg :
+          event.getArgumentArray() == null ? new Object[0] : event.getArgumentArray()) {
         assertThat(String.valueOf(arg)).doesNotContain(secretResponse);
       }
     }
@@ -202,29 +222,65 @@ class AuditReceiptServiceTest {
 
   private static AuditReceipt withAgent(AuditReceipt r, String agent) {
     return new AuditReceipt(
-        r.receiptId(), r.requestId(), r.timestampUtc(), agent, r.manifestId(), r.manifestHash(),
-        r.decision(), r.violationCodes(), r.promptHash(), r.responseHash(), r.model(),
+        r.receiptId(),
+        r.requestId(),
+        r.timestampUtc(),
+        agent,
+        r.manifestId(),
+        r.manifestHash(),
+        r.decision(),
+        r.violationCodes(),
+        r.promptHash(),
+        r.responseHash(),
+        r.model(),
         r.receiptHash());
   }
 
   private static AuditReceipt withDecision(AuditReceipt r, String decision) {
     return new AuditReceipt(
-        r.receiptId(), r.requestId(), r.timestampUtc(), r.agentId(), r.manifestId(),
-        r.manifestHash(), decision, r.violationCodes(), r.promptHash(), r.responseHash(),
-        r.model(), r.receiptHash());
+        r.receiptId(),
+        r.requestId(),
+        r.timestampUtc(),
+        r.agentId(),
+        r.manifestId(),
+        r.manifestHash(),
+        decision,
+        r.violationCodes(),
+        r.promptHash(),
+        r.responseHash(),
+        r.model(),
+        r.receiptHash());
   }
 
   private static AuditReceipt withPrompt(AuditReceipt r, String promptHash) {
     return new AuditReceipt(
-        r.receiptId(), r.requestId(), r.timestampUtc(), r.agentId(), r.manifestId(),
-        r.manifestHash(), r.decision(), r.violationCodes(), promptHash, r.responseHash(),
-        r.model(), r.receiptHash());
+        r.receiptId(),
+        r.requestId(),
+        r.timestampUtc(),
+        r.agentId(),
+        r.manifestId(),
+        r.manifestHash(),
+        r.decision(),
+        r.violationCodes(),
+        promptHash,
+        r.responseHash(),
+        r.model(),
+        r.receiptHash());
   }
 
   private static AuditReceipt withTimestamp(AuditReceipt r, java.time.Instant ts) {
     return new AuditReceipt(
-        r.receiptId(), r.requestId(), ts, r.agentId(), r.manifestId(), r.manifestHash(),
-        r.decision(), r.violationCodes(), r.promptHash(), r.responseHash(), r.model(),
+        r.receiptId(),
+        r.requestId(),
+        ts,
+        r.agentId(),
+        r.manifestId(),
+        r.manifestHash(),
+        r.decision(),
+        r.violationCodes(),
+        r.promptHash(),
+        r.responseHash(),
+        r.model(),
         r.receiptHash());
   }
 }

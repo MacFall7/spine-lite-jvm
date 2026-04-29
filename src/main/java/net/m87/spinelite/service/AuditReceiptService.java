@@ -163,7 +163,8 @@ public class AuditReceiptService {
   private static String hashUtf8(String s) {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      return "sha256:" + HexFormat.of().formatHex(digest.digest(s.getBytes(StandardCharsets.UTF_8)));
+      return "sha256:"
+          + HexFormat.of().formatHex(digest.digest(s.getBytes(StandardCharsets.UTF_8)));
     } catch (NoSuchAlgorithmException e) {
       throw new IllegalStateException("SHA-256 unavailable", e);
     }

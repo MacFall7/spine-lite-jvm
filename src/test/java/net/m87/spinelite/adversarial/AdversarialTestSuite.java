@@ -89,9 +89,12 @@ class AdversarialTestSuite {
             original.manifest().redactionRules());
     internal.put(SUMMARIZER_MANIFEST, new LoadedManifest(tampered, original.loadTimeHash()));
 
-    GovernedCallResponse body = post(SUMMARIZER_AGENT, SUMMARIZER_MANIFEST, "hi", HttpStatus.FORBIDDEN);
+    GovernedCallResponse body =
+        post(SUMMARIZER_AGENT, SUMMARIZER_MANIFEST, "hi", HttpStatus.FORBIDDEN);
 
-    assertThat(body.violations()).singleElement().extracting("code")
+    assertThat(body.violations())
+        .singleElement()
+        .extracting("code")
         .isEqualTo("MANIFEST_INTEGRITY_FAILURE");
     assertThat(receiptFor(body)).extracting(AuditReceipt::decision).isEqualTo("DENY");
   }
@@ -102,7 +105,9 @@ class AdversarialTestSuite {
     GovernedCallResponse body =
         post("classifier-v1", SUMMARIZER_MANIFEST, "hi", HttpStatus.FORBIDDEN);
 
-    assertThat(body.violations()).singleElement().extracting("code")
+    assertThat(body.violations())
+        .singleElement()
+        .extracting("code")
         .isEqualTo("MANIFEST_AGENT_MISMATCH");
     AuditReceipt receipt = receiptFor(body);
     assertThat(receipt.decision()).isEqualTo("DENY");
@@ -117,7 +122,9 @@ class AdversarialTestSuite {
     GovernedCallResponse body =
         post(SUMMARIZER_AGENT, SUMMARIZER_MANIFEST, prompt, HttpStatus.FORBIDDEN);
 
-    assertThat(body.violations()).singleElement().extracting("code")
+    assertThat(body.violations())
+        .singleElement()
+        .extracting("code")
         .isEqualTo("PROMPT_SIZE_VIOLATION");
   }
 
@@ -151,8 +158,7 @@ class AdversarialTestSuite {
   void nullBytesInPromptAreHandledGracefully() {
     String prompt = "before\u0000middle\u0000after";
 
-    GovernedCallResponse body =
-        post(SUMMARIZER_AGENT, SUMMARIZER_MANIFEST, prompt, HttpStatus.OK);
+    GovernedCallResponse body = post(SUMMARIZER_AGENT, SUMMARIZER_MANIFEST, prompt, HttpStatus.OK);
 
     AuditReceipt receipt = receiptFor(body);
     assertThat(receipt.promptHash()).startsWith("sha256:");

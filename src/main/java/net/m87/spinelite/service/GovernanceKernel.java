@@ -66,9 +66,7 @@ public class GovernanceKernel {
           List.of(
               new GovernanceViolation(
                   GovernanceViolation.EFFECT_CLASS_FORBIDDEN,
-                  "Effect class '"
-                      + manifest.effectClass()
-                      + "' is not permitted by this endpoint",
+                  "Effect class '" + manifest.effectClass() + "' is not permitted by this endpoint",
                   "effect_class")));
     }
 

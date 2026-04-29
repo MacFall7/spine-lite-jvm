@@ -31,8 +31,7 @@ class ManifestRegistryTest {
     ManifestRegistry registry = new ManifestRegistry(defaultConfig());
     registry.load();
 
-    LoadedManifest loaded =
-        registry.resolve("summarizer-v1", "readonly-summarizer").orElseThrow();
+    LoadedManifest loaded = registry.resolve("summarizer-v1", "readonly-summarizer").orElseThrow();
     assertThat(loaded.manifest().effectClass()).isEqualTo(EffectClass.READ_ONLY);
     assertThat(loaded.loadTimeHash()).startsWith("sha256:");
     assertThat(loaded.loadTimeHash()).hasSize("sha256:".length() + 64);

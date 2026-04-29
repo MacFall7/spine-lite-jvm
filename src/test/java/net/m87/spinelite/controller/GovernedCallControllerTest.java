@@ -55,9 +55,18 @@ class GovernedCallControllerTest {
 
   private static AuditReceipt fakeReceipt(String decision, String requestId) {
     return new AuditReceipt(
-        "rec-1", requestId, Instant.parse("2026-04-29T14:23:01.456Z"),
-        "summarizer-v1", "readonly-summarizer", "sha256:m",
-        decision, List.of(), "sha256:p", "sha256:r", "claude-sonnet-4-6", "sha256:rh");
+        "rec-1",
+        requestId,
+        Instant.parse("2026-04-29T14:23:01.456Z"),
+        "summarizer-v1",
+        "readonly-summarizer",
+        "sha256:m",
+        decision,
+        List.of(),
+        "sha256:p",
+        "sha256:r",
+        "claude-sonnet-4-6",
+        "sha256:rh");
   }
 
   @Test
@@ -89,9 +98,7 @@ class GovernedCallControllerTest {
   void denyPathReturns403WithViolations() throws Exception {
     GovernanceViolation v =
         new GovernanceViolation(
-            "MANIFEST_NOT_FOUND",
-            "Manifest 'unknown' is not registered",
-            "tool_manifest_id");
+            "MANIFEST_NOT_FOUND", "Manifest 'unknown' is not registered", "tool_manifest_id");
     when(kernel.evaluate(any())).thenReturn(new GovernanceDecision.Deny(List.of(v)));
     when(registry.snapshot()).thenReturn(java.util.Map.of());
     when(auditService.recordDeny(any(), any(), any(), any(), anyLong()))

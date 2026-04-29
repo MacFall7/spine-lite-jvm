@@ -19,8 +19,8 @@ import org.springframework.test.context.TestPropertySource;
 
 /**
  * Adversarial case 4: a manifest declaring effect_class WRITE_PRIVILEGED is loaded into the
- * registry. Calls to it must be denied with EFFECT_CLASS_FORBIDDEN regardless of agent
- * binding or prompt content.
+ * registry. Calls to it must be denied with EFFECT_CLASS_FORBIDDEN regardless of agent binding or
+ * prompt content.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(

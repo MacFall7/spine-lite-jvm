@@ -61,14 +61,12 @@ public class ManifestRegistry {
       try {
         manifest = jsonMapper.readValue(r.getInputStream(), ToolManifest.class);
       } catch (IOException e) {
-        throw new IllegalStateException(
-            "Failed to parse manifest file: " + r.getDescription(), e);
+        throw new IllegalStateException("Failed to parse manifest file: " + r.getDescription(), e);
       }
       validate(manifest, r.getDescription());
       String hash = computeHash(manifest);
       if (byId.containsKey(manifest.manifestId())) {
-        throw new IllegalStateException(
-            "Duplicate manifest_id at boot: " + manifest.manifestId());
+        throw new IllegalStateException("Duplicate manifest_id at boot: " + manifest.manifestId());
       }
       byId.put(manifest.manifestId(), new LoadedManifest(manifest, hash));
       log.info(
@@ -119,14 +117,10 @@ public class ManifestRegistry {
   private static void validate(ToolManifest m, String source) {
     require(m.manifestId() != null && !m.manifestId().isBlank(), "manifest_id", source);
     require(
-        m.manifestVersion() != null && !m.manifestVersion().isBlank(),
-        "manifest_version",
-        source);
-    require(
-        m.boundAgentIds() != null && !m.boundAgentIds().isEmpty(), "bound_agent_ids", source);
+        m.manifestVersion() != null && !m.manifestVersion().isBlank(), "manifest_version", source);
+    require(m.boundAgentIds() != null && !m.boundAgentIds().isEmpty(), "bound_agent_ids", source);
     require(m.effectClass() != null, "effect_class", source);
-    require(
-        m.allowedModels() != null && !m.allowedModels().isEmpty(), "allowed_models", source);
+    require(m.allowedModels() != null && !m.allowedModels().isEmpty(), "allowed_models", source);
     require(m.maxPromptChars() > 0, "max_prompt_chars", source);
     require(m.systemPrompt() != null && !m.systemPrompt().isBlank(), "system_prompt", source);
     require(m.redactionRules() != null, "redaction_rules", source);

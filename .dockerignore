@@ -1,0 +1,15 @@
+.git
+.github
+.gitignore
+.gitattributes
+target
+*.iml
+.idea
+.vscode
+.DS_Store
+.env
+.env.local
+README.md
+LICENSE
+Dockerfile
+.dockerignore

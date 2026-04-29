@@ -1,0 +1,15 @@
+target/
+*.class
+*.jar
+*.war
+*.iml
+.idea/
+.vscode/
+.DS_Store
+.mvn/wrapper/maven-wrapper.jar
+build/
+out/
+.env
+.env.local
+*.log
+hs_err_pid*

@@ -1,0 +1,13 @@
+{
+  "manifest_id": "readonly-summarizer",
+  "manifest_version": "1.0.0",
+  "bound_agent_ids": ["summarizer-v1"],
+  "effect_class": "READ_ONLY",
+  "allowed_models": ["claude-sonnet-4-6", "claude-haiku-4-5-20251001"],
+  "max_prompt_chars": 16000,
+  "system_prompt": "You are a read-only clinical summarizer. You produce summaries; you never recommend, diagnose, or prescribe.",
+  "redaction_rules": {
+    "strip_pii_from_logs": true,
+    "log_prompt": false
+  }
+}

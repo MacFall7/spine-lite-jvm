@@ -1,0 +1,13 @@
+{
+  "manifest_id": "write-bounded-classifier",
+  "manifest_version": "1.0.0",
+  "bound_agent_ids": ["classifier-v1"],
+  "effect_class": "WRITE_BOUNDED",
+  "allowed_models": ["claude-sonnet-4-6"],
+  "max_prompt_chars": 8000,
+  "system_prompt": "You are a bounded-write classifier. You may emit a single classification label and confidence score; you do not produce free-form prose, recommendations, or instructions.",
+  "redaction_rules": {
+    "strip_pii_from_logs": true,
+    "log_prompt": false
+  }
+}

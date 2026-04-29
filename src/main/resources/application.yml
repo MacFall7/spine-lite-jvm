@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spine-lite-jvm
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+spine-lite:
+  manifests:
+    classpath-pattern: "classpath:/manifests/*.json"
+  endpoint:
+    forbidden-effect-classes:
+      - WRITE_PRIVILEGED
+
+anthropic:
+  api-key: ${ANTHROPIC_API_KEY:}
+  default-model: claude-sonnet-4-6
+  timeout-ms: 30000
+
+logging:
+  config: classpath:logback-spring.xml

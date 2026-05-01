@@ -93,7 +93,7 @@ curl -s -X POST http://localhost:8080/v1/governed-call \
 curl -s http://localhost:8080/v1/receipts/<receipt_id>
 ```
 
-The full test suite (45 tests, including the 10 adversarial cases) runs with:
+The full test suite (48 tests, including the 10 adversarial cases) runs with:
 
 ```bash
 ./mvnw verify

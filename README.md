@@ -10,7 +10,7 @@ unchanged: every LLM call passes through a fail-closed decision point that
 resolves a signed tool manifest, checks an integrity hash, validates the
 caller's binding and prompt size, and emits an auditable receipt regardless of
 the outcome. This v1 demonstrates the same discipline in Spring Boot 3 + Java
-21 and is intended to be reviewable by a healthplan engineering audience in
+21 and is intended to be reviewable in
 under fifteen minutes.
 
 ## Architecture
